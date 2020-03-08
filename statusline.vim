@@ -57,6 +57,7 @@ let s:modes = {
 
 " 需要加载的模块
 let s:loaded_sections = ['syntax checking', 'major mode', 'minor mode lighters', 'version control info', 'cursorpos']
+"let s:loaded_sections = ['syntax checking', 'major mode', 'minor mode lighters', 'cursorpos']
 " 获得左右分隔符，比如， 
 let [s:lsep , s:rsep] = get(s:separators, g:spacevim_statusline_separator, s:separators['arrow'])
 let s:colors_template = damonvim#theme#gruvbox#palette()
@@ -141,7 +142,7 @@ function! damonvim#statusline#get(...) abort
         "if index(s:loaded_sections, 'whitespace') != -1
             "call add(rsec, s:whitespace())
         "endif
-        call fugitive#detect(getcwd())
+        "call FugitiveDetect(getcwd())
         return s:STATUSLINE.build(lsec, rsec, s:lsep, s:rsep,
                     \ 'SpaceVim_statusline_a', 'SpaceVim_statusline_b', 'SpaceVim_statusline_c', 'SpaceVim_statusline_z')
         "return s:STATUSLINE.build([' ',' Startify ', '  ' . ' ' . ' '], [], s:lsep, s:rsep,
@@ -248,7 +249,7 @@ endfunction
 function! s:inactive() abort
     return '%#SpaceVim_statusline_ia#' . s:winnr() . '%#SpaceVim_statusline_ia_SpaceVim_statusline_b#'
                 \ . '%#SpaceVim_statusline_b#' . s:filename() . ''
-                \ . ' ' . &filetype . ' ' 
+                \ . ' ' . &filetype . ' '
                 \ . s:modes() . ''
                 \ . s:git_branch() . ''
                 \ . ' %='
@@ -378,7 +379,7 @@ function! s:git_branch() abort
     if exists('g:loaded_fugitive')
         let l:head = fugitive#head()
         if empty(l:head)
-            call fugitive#detect(getcwd())
+            call FugitiveDetect(getcwd())
             let l:head = fugitive#head()
         endif
         return empty(l:head) ? '' : '  '.l:head . ' '
